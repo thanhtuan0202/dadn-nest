@@ -1,18 +1,21 @@
 import axios from 'axios';
 import { connect } from 'mqtt';
-const adaRequest = axios.create({
-  baseURL: `https://io.adafruit.com/api/v2/nttuan09`,
-  headers: {
-    'X-AIO-Key': 'aio_NXIE91hb5GoTvsnkoetjOhkMIn0p',
-    'Content-Type': 'application/json',
-  },
-});
+
+// const baseURL = `https://io.adafruit.com/api/v2/${process.env.ADAFRUIT_USERNAME}`;
+
+// const adaRequest = axios.create({
+//   baseURL: baseURL,
+//   headers: {
+//     'X-AIO-Key': '',
+//     'Content-Type': 'application/json',
+//   },
+// });
 
 function publishData(feedName, data, callback) {
   const broker = 'mqtt://io.adafruit.com';
   const port = 1883;
-  const username = 'nttuan09';
-  const password = 'aio_NXIE91hb5GoTvsnkoetjOhkMIn0p';
+  const username = process.env.ADAFRUIT_USERNAME;
+  const password = process.env.ADAFRUIT_KEY;
   const client = connect(broker, {
     port: port,
     username: username,
@@ -32,4 +35,4 @@ function publishData(feedName, data, callback) {
     });
   });
 }
-export { adaRequest, publishData };
+export { publishData };

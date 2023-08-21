@@ -8,10 +8,11 @@ import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 
 import { DataModule } from './data/data.module';
-@Module({
-  imports: [ConfigModule.forRoot(), AuthModule, DataModule],
-  controllers: [AppController],
-  providers: [AppService],
-})
+import { AppGateway } from './socket/app.gateway';
 
+@Module({
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, DataModule],
+  controllers: [AppController],
+  providers: [AppGateway, AppService],
+})
 export class AppModule {}

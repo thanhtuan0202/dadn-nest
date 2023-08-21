@@ -1,12 +1,15 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { DataService } from './data.service';
-import { adaRequest, publishData } from '../helpers/adahelper';
 @Controller('data')
 export class DataController {
   constructor(private readonly dataService: DataService) {}
+  @Get('/hello')
+  getHello() {
+    return this.dataService.getHello();
+  }
   @Get('lastled')
-  getLastLed(): Promise<JSON> {
-    return this.dataService.lastLed();
+  async getLastLed(@Res() res: any): Promise<any> {
+    res.status(200).json({ message: await this.dataService.lastLed() });
   }
   @Get('notifications')
   getNotifications(): Promise<JSON> {

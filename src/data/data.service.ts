@@ -2,27 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { firebaseDb } from '../config/firebase';
 import { Data, Notification } from './interface/data.interface';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { adaRequest, publishData } from '../helpers/adahelper';
+import {  publishData } from '../helpers/adahelper';
+import { HttpService } from '@nestjs/axios';
+import { Observable, map } from 'rxjs';
+import * as process from "process";
 @Injectable()
 export class DataService {
+  constructor(private readonly httpService: HttpService) {}
   private database = getDatabase(firebaseDb);
+
   getHello(): string {
     return 'Hello World!';
   }
-  async lastLed(): Promise<JSON> {
-    let res: any;
-    await adaRequest
-      .get(`/feeds/dadn.led/data/last`)
-      .then(({ data }) => {
-        console.log(data);
-        res = data;
-        return data;
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error(error);
-      });
-    return res;
+  async lastLed() {
+    const url = `https://io.adafruit.com/api/v2/${process.env.ADAFRUIT_USERNAME}/feeds/dadn.led/data/last`; // URL you want to fetch data from
+    const config = {
+      headers: {
+        'X-AIO-Key': process.env.ADAFRUIT_KEY,
+        'Content-Type': 'application/json',
+      },
+    }
+    try {
+      const response = await this.httpService.get(url,config).toPromise();
+      console.log('Response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
   }
   async setLed(value: any): Promise<boolean> {
     let res: boolean;
@@ -68,4 +75,4 @@ export class DataService {
     return res;
   }
 }
-export class MqttService {}
+

@@ -1,9 +1,11 @@
-import { Module } from "@nestjs/common";
-import { DataController } from "./data.controller";
-import { DataService } from "./data.service";
+import { Module } from '@nestjs/common';
+import { DataController } from './data.controller';
+import { DataService } from './data.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-    providers: [ DataService],
-    controllers: [DataController]
+  imports: [HttpModule],
+  providers: [DataService],
+  controllers: [DataController],
 })
-export class DataModule{};
+export class DataModule {}
