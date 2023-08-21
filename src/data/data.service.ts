@@ -24,8 +24,26 @@ export class DataService {
     }
     try {
       const response = await this.httpService.get(url,config).toPromise();
-      console.log('Response:', response.data);
-      return response.data;
+      // console.log('Response:', response.data);
+      return { ...response.data, message: "successful" };
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+  async lastFan() {
+    const url = `https://io.adafruit.com/api/v2/${process.env.ADAFRUIT_USERNAME}/feeds/dadn.fan/data/last`; // URL you want to fetch data from
+    const config = {
+      headers: {
+        'X-AIO-Key': process.env.ADAFRUIT_KEY,
+        'Content-Type': 'application/json',
+      },
+    }
+    try {
+      const response = await this.httpService.get(url,config).toPromise();
+      // console.log('Response:', response.data);
+      return { ...response.data, message: "successful" };
     } catch (error) {
       console.error('Error:', error);
       throw error;

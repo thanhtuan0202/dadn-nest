@@ -9,11 +9,15 @@ export class DataController {
   }
   @Get('lastled')
   async getLastLed(@Res() res: any): Promise<any> {
-    res.status(200).json({ message: await this.dataService.lastLed() });
+    res.status(200).json(await this.dataService.lastLed());
   }
   @Get('notifications')
-  getNotifications(): Promise<JSON> {
+  async getNotifications(): Promise<JSON> {
     return this.dataService.getNotifications();
+  }
+  @Get('lastfan')
+  async getLastFan(@Res() res: any) {
+    res.status(200).json(await this.dataService.lastFan());
   }
   @Post('setled')
   setLed(@Req() req: any, @Res() res: any): void {
